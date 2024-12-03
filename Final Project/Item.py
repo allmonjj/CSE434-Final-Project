@@ -1,10 +1,10 @@
-class Item():
+class Item:
     def __init__(self, name, description, effect):
         self.name = name
         self.description = description
         self.effect = effect
 
-    # Define __hash__ and __eq__ so that Item objects can be used as dictionary keys. Has to be immutable.
+    # Define __hash__ and __eq__ so that Item objects can be used as dictionary keys. (Has to be immutable)
     def __hash__(self):
         return hash((self.name, self.description))
 
