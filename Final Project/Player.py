@@ -1,9 +1,13 @@
+from Location import Location
+from Inventory import Inventory
+
 class Player():
-    def __init__(self, hp, xp, atkPower, inventory):
+    def __init__(self, hp, xp, atkPower, inventory : Inventory, currLocation : Location):
         self.hp = hp
         self.xp = xp
         self.atkPower = atkPower
         self.inventory = inventory
+        self.currlocation = currLocation
 
     def getId(self):
         return self.id
@@ -28,3 +32,9 @@ class Player():
 
     def setAtkPower(self, atkPower):
         self.atkPower = atkPower
+
+    def getCurrLocation(self):
+        return self.currlocation
+
+    def setCurrLocation(self, currLocation : Location):
+        self.currlocation = currLocation

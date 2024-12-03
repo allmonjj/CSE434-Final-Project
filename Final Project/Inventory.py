@@ -2,10 +2,10 @@ class Inventory:
     def __init__(self):
         self.items = {}
 
-    def add_Item(self, item, quantity):
+    def add_Item(self, item):
         if item not in self.items:
             self.items[item] = 0
-        self.items[item] += quantity
+        self.items[item] += 1
 
     def remove_Item(self, item):
         if item in self.items and self.items[item] > 0:
