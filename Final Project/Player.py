@@ -1,7 +1,8 @@
 class Player():
-    def __init__(self, hp, xp, inventory):
+    def __init__(self, hp, xp, atkPower, inventory):
         self.hp = hp
         self.xp = xp
+        self.atkPower = atkPower
         self.inventory = inventory
 
     def getId(self):
@@ -21,3 +22,9 @@ class Player():
 
     def getInv(self):
         return self.inventory
+
+    def getAtkPower(self):
+        return self.atkPower
+
+    def setAtkPower(self, atkPower):
+        self.atkPower = atkPower
