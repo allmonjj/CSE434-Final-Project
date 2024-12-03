@@ -1,13 +1,19 @@
+import NPC
+
 class Location:
-    def __init__(self, x, y, name=None, description=None, hasItem=False, hasEnemy=False):
+    def __init__(self, x, y, name=None, description=None, hasItem=False, hasEnemy=False, npc=None):
         self.coordinates: tuple[int, int] = (x, y)
         self.name = name
         self.description = description
         self.hasItem = hasItem
         self.hasEnemy = hasEnemy
+        self.npc = npc
 
     def getCoordinates(self):
         return self.coordinates
+
+    def setCoordinates(self, coordinates : tuple[int, int]):
+        self.coordinates = coordinates
 
     def getX(self):
         return self.coordinates[0]
@@ -32,6 +38,12 @@ class Location:
 
     def getHasEnemy(self):
         return self.hasEnemy
+
+    def getNpc(self):
+        return self.npc
+
+    def setNpc(self, npc:NPC):
+        self.npc = npc
 
     def __repr__(self):
         return (

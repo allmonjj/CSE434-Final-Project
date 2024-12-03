@@ -11,15 +11,35 @@ def playerMovement(gm : GameMechanics):
         user_input = input("Where to next? (Enter 1 - 4) \n1. NORTH\n2. SOUTH\n3. EAST\n4. WEST\n")
         if user_input == "1":
             gm.moveNorth()
+            if gm.checkForEnemy():
+                gm.combat()
+            if gm.checkForItem():
+                # Grab item
+                print("Feature not yet implemented")
             break
         elif user_input == "2":
             gm.moveSouth()
+            if gm.checkForEnemy():
+                gm.combat()
+            if gm.checkForItem():
+                # Grab item
+                print("Feature not yet implemented")
             break
         elif user_input == "3":
             gm.moveEast()
+            if gm.checkForEnemy():
+                gm.combat()
+            if gm.checkForItem():
+                # Grab item
+                print("Feature not yet implemented")
             break
         elif user_input == "4":
             gm.moveWest()
+            if gm.checkForEnemy():
+                gm.combat()
+            if gm.checkForItem():
+                # Grab item
+                print("Feature not yet implemented")
             break
         else:
             print("Invalid input. Try again!")
