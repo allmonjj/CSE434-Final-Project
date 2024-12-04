@@ -105,3 +105,6 @@ class GameMechanics:
         self.player.getInv().add_Item(locItem)
         self.player.getCurrLocation().removeItem()
 
+    def useItemFromInventory(self) -> None:
+        inv = self.player.getInv()
+

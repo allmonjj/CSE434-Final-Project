@@ -21,7 +21,7 @@ class Inventory:
         return self.items
 
     def __repr__(self) -> str:
-        inventory_str = "Inventory:\n"
-        for item, count in self.items.items():
-            inventory_str += f"{item.__repr__()} - Quantity: {count}\n\n"
+        inventory_str = "\nInventory:\n"
+        for i, (item, count) in enumerate(self.items.items(), start=1):
+            inventory_str += f"{i}. {item.__repr__()} - Quantity: {count}\n\n"  
         return inventory_str

@@ -56,6 +56,14 @@ def checkInventory(gm : GameMechanics):
 
     gm.checkInventory()
 
+def useInventory(gm : GameMechanics):
+        while True:
+            user_input = input("Would you like to use an item from your inventory? (Y/N) \n").lower()
+            if user_input == "y":
+                print(f"")
+            else:
+                break
+
 def main():
     print("Welcome to CSE434 Final Project. You will play a Dungeons & Dragons 'esque' game")
     player = Player(100, 0, 0, Inventory(), Location(0, 0, "Beginning Area"))
@@ -67,6 +75,7 @@ def main():
         elif user_input == "2":
             # Check Inventory
             checkInventory(gm)
+            useInventory(gm)
         elif user_input == "3":
             # Location Details
             print(player.getCurrLocation().__repr__())
