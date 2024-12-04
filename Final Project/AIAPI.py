@@ -1,12 +1,10 @@
-from openai import OpenAI
+import openai
+from openai._exceptions import OpenAIError
 import os
 
 class AIAPI:
     def __init__(self):
-        self.client = OpenAI(
-            # api_key=userdata.get('OPENAI_API_KEY')
-            api_key=os.getenv("OPENAI_API_KEY")
-        )
+        openai.api_key = os.getenv("OPENAI_API_KEY")
 
     def getAPIResponse(
             self,
@@ -29,15 +27,26 @@ class AIAPI:
                 {"role": "user", "content": user_message}
             ]
 
-        completion = self.client.chat.completions.create(
-            model=model,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            top_p=top_p,
-            frequency_penalty=frequency_penalty,
-            presence_penalty=presence_penalty
-        )
+        try:
+            completion = openai.ChatCompletion.create(
+                model=model,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                top_p=top_p,
+                frequency_penalty=frequency_penalty,
+                presence_penalty=presence_penalty,
+                response_format=response_format
+            )
 
-        response = completion.choices[0].message.content
-        return response
+            response = completion.choices[0].message.content
+            return response
+
+        except OpenAIError as e:
+            # Handle specific OpenAI errors
+            print(f"OpenAI API error: {e}")
+            return None
+        except Exception as e:
+            # Handle other potential errors
+            print(f"An unexpected error occurred: {e}")
+            return None
