@@ -1,6 +1,7 @@
 from Player import Player
 from NPC import NPC
 from Location import Location
+from Item import Item
 import random
 
 
@@ -17,7 +18,7 @@ class GameMechanics:
         return True if self.player.getCurrLocation().getHasItem() else False
 
     def combat(self) -> None:
-        npc = self.player.getCurrLocation().getNPC()
+        npc = self.player.getCurrLocation().getNpc()
         if isinstance(npc, NPC):
             origHp = self.player.getHp()
             while self.player.getHp() > 0 and npc.getHp() > 0:
@@ -31,6 +32,9 @@ class GameMechanics:
                 if npc.getHp() <= 0:
                     print(f"You have defeated {npc.getName()}!")
                     self.player.setHp(origHp)
+                    self.player.getCurrLocation().setHasEnemy(False)
+                    if npc.getXp() != 0:
+                        self.player.setXp(self.player.getXp() + npc.getXp())
                     break
 
                 self.player.setHp(self.player.getHp() - npc.getAtkPower())
@@ -47,8 +51,9 @@ class GameMechanics:
 
     def levelUp(self) -> None:
         if self.player.getXp() >= 50:
+            print(f"You have leveled up! HP - Old : {self.player.getHp()} New : {self.player.getHp() + 25}")
             self.player.setHp(self.player.getHp() + 25)
-            self.player.setXp(0)
+            self.player.setXp(self.player.getXp() - 50)
 
 # Move East / West
     # Modify X coordinate (Left - Right)
@@ -91,3 +96,12 @@ class GameMechanics:
         # name, description, hasItem, hasEnemy
         self.player.getCurrLocation().setCoordinates((x, y))
         print(f"Player has moved South : Current Coordinates : ({x}, {y})")
+
+    def checkInventory(self):
+        print(self.player.getInv().__repr__()) # Grabbing inventory object not dictionary here
+
+    def addItemToInventory(self) -> None:
+        locItem = self.player.getCurrLocation().getItem()
+        self.player.getInv().add_Item(locItem)
+        self.player.getCurrLocation().removeItem()
+
