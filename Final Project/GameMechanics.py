@@ -9,17 +9,30 @@ class GameMechanics:
         if isinstance(player, Player):
             self.player = player
 
-    def combat(self, npc) -> None:
+
+    def checkForEnemy(self) -> bool:
+        return True if self.player.getCurrLocation().getHasEnemy() else False
+
+    def checkForItem(self) -> bool:
+        return True if self.player.getCurrLocation().getHasItem() else False
+
+    def combat(self) -> None:
+        npc = self.player.getCurrLocation().getNPC()
         if isinstance(npc, NPC):
+            origHp = self.player.getHp()
             while self.player.getHp() > 0 and npc.getHp() > 0:
                 self.player.setAtkPower(random.randint(1, 6))
                 npc.setAtkPower(random.randint(1, 6))
-                npc.setHp(npc.getHp() - self.player.getAtkPower())
+
                 print(f"Player HP : {self.player.getHp()} - Player AtkPower : {self.player.getAtkPower()}")
                 print(f"NPC HP : {npc.getHp()} - NPC AtkPower : {npc.getAtkPower()}\n")
+
+                npc.setHp(npc.getHp() - self.player.getAtkPower())
                 if npc.getHp() <= 0:
                     print(f"You have defeated {npc.getName()}!")
+                    self.player.setHp(origHp)
                     break
+
                 self.player.setHp(self.player.getHp() - npc.getAtkPower())
                 if self.player.getHp() <= 0:
                     print("You have been defeated!")
@@ -49,7 +62,7 @@ class GameMechanics:
         y = playCoord[1]
         # Need to specify the following parameters
         # name, description, hasItem, hasEnemy
-        self.player.setCurrLocation(Location(x, y))
+        self.player.getCurrLocation().setCoordinates((x, y))
         print(f"Player has moved East : Current Coordinates : ({x}, {y})")
 
     def moveWest(self) -> None:
@@ -58,7 +71,7 @@ class GameMechanics:
         y = playCoord[1]
         # Need to specify the following parameters
         # name, description, hasItem, hasEnemy
-        self.player.setCurrLocation(Location(x, y))
+        self.player.getCurrLocation().setCoordinates((x, y))
         print(f"Player has moved West : Current Coordinates : ({x}, {y})")
 
     def moveNorth(self) -> None:
@@ -67,7 +80,7 @@ class GameMechanics:
         y = playCoord[1] + 1
         # Need to specify the following parameters
         # name, description, hasItem, hasEnemy
-        self.player.setCurrLocation(Location(x, y))
+        self.player.getCurrLocation().setCoordinates((x, y))
         print(f"Player has moved North : Current Coordinates : ({x}, {y})")
 
     def moveSouth(self) -> None:
@@ -76,5 +89,5 @@ class GameMechanics:
         y = playCoord[1] - 1
         # Need to specify the following parameters
         # name, description, hasItem, hasEnemy
-        self.player.setCurrLocation(Location(x, y))
+        self.player.getCurrLocation().setCoordinates((x, y))
         print(f"Player has moved South : Current Coordinates : ({x}, {y})")
