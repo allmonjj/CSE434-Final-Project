@@ -24,7 +24,7 @@ class Player():
     def setXp(self, xp):
         self.xp = xp
 
-    def getInv(self):
+    def getInv(self) -> Inventory:
         return self.inventory
 
     def getAtkPower(self):
@@ -33,8 +33,5 @@ class Player():
     def setAtkPower(self, atkPower):
         self.atkPower = atkPower
 
-    def getCurrLocation(self):
+    def getCurrLocation(self) -> Location:
         return self.currlocation
-
-    def setCurrLocation(self, currLocation : Location):
-        self.currlocation = currLocation

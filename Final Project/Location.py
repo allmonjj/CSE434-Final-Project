@@ -1,13 +1,16 @@
-import NPC
+from NPC import NPC
+from Item import Item
 
 class Location:
-    def __init__(self, x, y, name=None, description=None, hasItem=False, hasEnemy=False, npc=None):
+    def __init__(self, x, y, name : str =None, description : str=None, hasItem=False, hasEnemy=False, npc : NPC=None, item : Item=None, visited : bool=False):
         self.coordinates: tuple[int, int] = (x, y)
         self.name = name
         self.description = description
         self.hasItem = hasItem
         self.hasEnemy = hasEnemy
         self.npc = npc
+        self.item = item
+        self.visited = visited
 
     def getCoordinates(self):
         return self.coordinates
@@ -36,14 +39,32 @@ class Location:
     def getHasItem(self):
         return self.hasItem
 
+    def setHasItem(self, hasItem : bool):
+        self.hasItem = hasItem
+
     def getHasEnemy(self):
         return self.hasEnemy
 
-    def getNpc(self):
+    def setHasEnemy(self, hasEnemy : bool):
+        self.hasEnemy = hasEnemy
+
+    def getNpc(self) -> NPC:
         return self.npc
 
-    def setNpc(self, npc:NPC):
+    def addNpc(self, npc : NPC):
         self.npc = npc
+
+    def getItem(self) -> Item:
+        return self.item
+
+    def removeItem(self):
+        self.item = None
+
+    def isVisited(self) -> bool:
+        return self.visited
+
+    def setVisited(self, visited : bool):
+        self.visited = visited
 
     def __repr__(self):
         return (
