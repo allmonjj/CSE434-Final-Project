@@ -60,7 +60,7 @@ def useInventory(gm : GameMechanics):
         while True:
             user_input = input("Would you like to use an item from your inventory? (Y/N) \n").lower()
             if user_input == "y":
-                print(f"")
+                gm.useItemFromInventory()
             else:
                 break
 

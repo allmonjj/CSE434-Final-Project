@@ -107,4 +107,25 @@ class GameMechanics:
 
     def useItemFromInventory(self) -> None:
         inv = self.player.getInv()
+        invLength = len(inv.items)
+        user_input = input(f"Which item would you like to use? (1 - {invLength})")
+
+        desiredItem :Item = None
+
+        for i, item in enumerate(inv.items.items(), start=1):
+            # Item is considered the tuple, with the Key being an Item object and its value being the count of that item
+            if user_input == str(i):
+                desiredItem = item[0]
+                print(f"\nItem found {item.__repr__()}")
+                break
+            else:
+                continue
+
+        if desiredItem is not None:
+            print(f"{desiredItem.getName()} used!\n")
+            # Use item logic
+            inv.remove_Item(desiredItem)
+        else:
+            print("Item not found!\n")
+
 

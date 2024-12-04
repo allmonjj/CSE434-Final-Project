@@ -51,7 +51,7 @@ class Location:
     def getNpc(self) -> NPC:
         return self.npc
 
-    def setNpc(self, npc : NPC):
+    def addNpc(self, npc : NPC):
         self.npc = npc
 
     def getItem(self) -> Item:
