@@ -1,0 +1,3 @@
+https://platform.openai.com/docs/overview
+https://platform.openai.com/docs/guides/structured-outputs?context=with_parse
+https://platform.openai.com/docs/api-reference/introduction
