@@ -65,7 +65,7 @@ def useInventory(gm : GameMechanics):
                 break
 
 def main():
-    print("Welcome to CSE434 Final Project. You will play a Dungeons & Dragons 'esque' game")
+    print("Welcome to my CSE434 Final Project. You will play a Dungeons & Dragons 'esque' game")
     player = Player(100, 0, 0, Inventory(), Location(0, 0, "Beginning Area"))
     gm = GameMechanics(player)
     while True:

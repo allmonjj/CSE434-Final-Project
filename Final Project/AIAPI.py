@@ -1,21 +1,19 @@
-import openai
+from openai import OpenAI
 from openai._exceptions import OpenAIError
+from pydantic import BaseModel
 import os
+import json
 
 class AIAPI:
     def __init__(self):
-        openai.api_key = os.getenv("OPENAI_API_KEY")
+        self.client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
 
     def getAPIResponse(
             self,
             model: str,
             user_message: str,
             temperature: float = 1.0,
-            max_tokens: int = 2048,
-            top_p: float = 1.0,
-            frequency_penalty: float = 0.0,
-            presence_penalty: float = 0.0,
-            response_format: str = "text",
+            response_format = "text",
             system_message: str = ""
     ):
 
@@ -28,19 +26,19 @@ class AIAPI:
             ]
 
         try:
-            completion = openai.ChatCompletion.create(
+            completion = self.client.beta.chat.completions.parse(
                 model=model,
                 messages=messages,
                 temperature=temperature,
-                max_tokens=max_tokens,
-                top_p=top_p,
-                frequency_penalty=frequency_penalty,
-                presence_penalty=presence_penalty,
                 response_format=response_format
             )
 
-            response = completion.choices[0].message.content
-            return response
+            responseMessage = completion.choices[0].message
+            if responseMessage.parsed:
+                return json.loads(completion.choices[0].message.content)
+            else:
+                print(f"Refused Response : \n{responseMessage.refusal}")
+                return None
 
         except OpenAIError as e:
             # Handle specific OpenAI errors
@@ -50,3 +48,60 @@ class AIAPI:
             # Handle other potential errors
             print(f"An unexpected error occurred: {e}")
             return None
+
+class Item(BaseModel):
+    name: str
+    description: str
+    effect: str
+
+class NPC(BaseModel):
+    name: str
+    hp: int
+    xp: int
+
+class Location(BaseModel):
+    name: str
+    description: str
+    hasItem: bool
+    hasEnemy: bool
+    item: Item
+    npc: NPC
+
+class Response(BaseModel):
+    location: Location
+
+if __name__ == "__main__":
+    AI = AIAPI()
+
+    system_message = """
+    You are a Game Master for a Dungeons & Dragons style game. Your responsibilities include:
+    1. Tracking and persisting game states (locations, and whether they have an item and/or an NPC enemy).
+    2. Generating location descriptions and managing item and NPC placement dynamically.
+    3. Ensuring a coherent narrative and logical progression in the game. As in if a player enters a room previously visited, you must recognize and recall it.
+    Respond with structured JSON data that aligns with the game's model, including:
+    - Location state and descriptions.
+    - NPC/item interactions and statuses.
+    - Possible item effect format : {"(+-) HP/ATKPOWER"} Keep negative effects to a minimum.
+    Follow the provided schema when responding.
+    """
+
+    player_state = {
+        "currentLocation": {
+            "coordinates": (0, 0),
+            "name": "Starting Point",
+            "description": "A calm meadow with a single tree.",
+            "hasItem": False,
+            "hasEnemy": False,
+            "npc": {
+                "name": "",
+                "description": "",
+            }
+        }
+    }
+
+    user_message = f"""
+    Player State: {json.dumps(player_state)}
+    Request: Provide the new location's details and NPC/item interactions (if any).
+    """
+
+    print(f"\nRESPONSE : \n{AI.getAPIResponse(model="gpt-4o", user_message=user_message, system_message=system_message, response_format=Response)}")

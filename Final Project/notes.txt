@@ -1,3 +1,5 @@
 https://platform.openai.com/docs/overview
 https://platform.openai.com/docs/guides/structured-outputs?context=with_parse
 https://platform.openai.com/docs/api-reference/introduction
+
+{'location': {'name': 'Mystic Forest', 'description': 'A dense forest filled with towering trees and the sounds of distant wildlife. Sunlight barely breaks through the canopy above.', 'hasItem': True, 'hasEnemy': True, 'item': {'name': 'Ancient Rune', 'description': 'A stone rune with mysterious engravings that glow faintly.', 'effect': 'Unlocks hidden abilities.'}, 'npc': {'name': 'Forest Guardian', 'hp': 100, 'xp': 50}}}

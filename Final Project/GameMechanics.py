@@ -55,6 +55,10 @@ class GameMechanics:
             self.player.setHp(self.player.getHp() + 25)
             self.player.setXp(self.player.getXp() - 50)
 
+
+    # def generateLocations(self):
+
+
 # Move East / West
     # Modify X coordinate (Left - Right)
 
