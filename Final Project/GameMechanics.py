@@ -4,6 +4,7 @@ from NPC import NPC
 from Location import Location
 from Item import Item
 import random
+import re
 
 
 class GameMechanics:
@@ -165,7 +166,47 @@ class GameMechanics:
             self.player.getInv().add_Item(locItem)
             self.player.getCurrLocation().removeItem()
 
+    def parse_and_apply(self, modifier_str):
+        """
+        Enhanced parser that handles case-insensitive attributes and floating point values.
+
+        Args:
+            character (Character): The character instance to modify.
+            modifier_str (str): The modifier string, e.g., "+15.5 ATKPOWER".
+
+        Raises:
+            ValueError: If the modifier string is invalid.
+        """
+        # Enhanced regex pattern to handle floating numbers and case-insensitive attributes
+        pattern = r'^([+-])(\d+(\.\d+)?)\s+(\w+)$'
+        match = re.match(pattern, modifier_str.strip(), re.IGNORECASE)
+
+        if not match:
+            raise ValueError(f"Invalid modifier format: '{modifier_str}'")
+
+        sign, value, _, attribute = match.groups()
+        value = float(value)
+        if sign == '-':
+            value = -value
+
+        # Normalize attribute name (assuming class attributes are uppercase)
+        attribute = attribute.upper()
+
+        # Check if the attribute exists, if not, optionally add it
+        if not hasattr(self.player, attribute):
+            # Optionally, create the attribute
+            setattr(self.player, attribute, 0)
+            print(f"Created new attribute '{attribute}' with initial value 0.")
+
+        # Apply the modification
+        current_value = getattr(self.player, attribute)
+        setattr(self.player, attribute, current_value + value)
+        print(f"Applied modifier: {modifier_str} -> {attribute} updated to {getattr(self.player, attribute)}")
+
     def useItemFromInventory(self) -> None:
+        # Test object
+        self.player.getInv().add_Item(Item("test", "testDesc", "+10 ATKPOWER"))
+
         inv = self.player.getInv()
         invLength = len(inv.items)
         user_input = input(f"Which item would you like to use? (1 - {invLength})")
@@ -184,6 +225,7 @@ class GameMechanics:
         if desiredItem is not None:
             print(f"{desiredItem.getName()} used!\n")
             # USE ITEM LOGIC
+            self.parse_and_apply(desiredItem.getEffect())
             inv.remove_Item(desiredItem)
         else:
             print("Item not found!\n")
