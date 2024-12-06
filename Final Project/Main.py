@@ -50,19 +50,20 @@ def checkInventory(gm : GameMechanics):
     gm.checkInventory()
 
 def useInventory(gm : GameMechanics):
-        while True:
-            user_input = input("Would you like to use an item from your inventory? (Y/N) \n").lower()
-            if user_input == "y":
-                gm.useItemFromInventory()
-            else:
-                break
+    while True:
+        user_input = input("Would you like to use an item from your inventory? (Y/N)\n\n").lower()
+        if user_input == "y":
+            gm.useItemFromInventory()
+            break
+        else:
+            break
 
 def main():
     print("Welcome to my CSE434 Final Project. You will play a Dungeons & Dragons 'esque' game")
     player = Player(100, 0, 0, Inventory(), Location(0, 0, "Mystic Forest", description='A dense forest filled with towering trees and the sounds of distant wildlife. Sunlight barely breaks through the canopy above.'))
     gm = GameMechanics(player)
     while True:
-        user_input = input("What would you like to do? (Enter 1 - 4) \n1. MOVE\n2. CHECK INVENTORY\n3. LOCATION DETAILS\n4. EXIT\n")
+        user_input = input("What would you like to do? (Enter 1 - 5) \n1. MOVE\n2. CHECK INVENTORY\n3. LOCATION DETAILS\n4. Player Details\n5. EXIT\n")
         if user_input == "1":
             playerMovement(gm)
         elif user_input == "2":
@@ -71,7 +72,9 @@ def main():
             useInventory(gm)
         elif user_input == "3":
             # Location Details
-            print(player.getCurrLocation().__repr__())
+            print(f"{player.getCurrLocation().__repr__()}")
+        elif user_input == "4":
+            print(f"{player.__repr__()}")
         else:
             print("Thanks for playing!")
             exit()

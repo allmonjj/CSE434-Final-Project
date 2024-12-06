@@ -37,4 +37,4 @@ class Player():
         return self.currlocation
 
     def __repr__(self):
-        return f"Player HP : {self.getHp()} - Player ATK Power : {self.getAtkPower()} - Player XP : {self.getXp()}\n"
+        return f"\nPlayer HP : {self.getHp()} - Player ATK Power : {self.getAtkPower()} - Player XP : {self.getXp()}\n"
