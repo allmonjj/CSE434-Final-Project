@@ -21,4 +21,4 @@ class Item:
         return isinstance(other, Item) and self.name == other.name and self.description == other.description
 
     def __repr__(self) -> str:
-        return f"Item (Name : {self.name}, Description : {self.description}, Effect : {self.effect})"
+        return f"Name : {self.name} - Description : {self.description} - Effect : {self.effect}"

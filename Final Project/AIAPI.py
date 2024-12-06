@@ -37,11 +37,11 @@ class AIAPI:
             You are a Game Master for a Dungeons & Dragons style game. Your responsibilities include:
             1. Tracking and persisting game states (locations, and whether they have an item and/or an NPC enemy).
             2. Generating location descriptions and managing item and NPC placement dynamically.
-            3. Ensuring a coherent narrative and logical progression in the game. As in if a player enters a room previously visited, you must recognize and recall it.
+            3. Ensuring a coherent narrative and logical progression in the game. As in if a player enters a room previously visited, you must recognize and recall it. Therefore the starting room is (0,0). Moving North/South modifies x accordingly, and moving East/West modifies y accordingly.
             Respond with structured JSON data that aligns with the game's model, including:
             - Location state and descriptions.
             - NPC/item interactions and statuses.
-            - Possible item effect format : {"(+-) HP/ATKPOWER"} Keep negative effects to a minimum.
+            - Possible item effect format : {"(+-) HP/ATKPOWER"} Keep negative effects to a minimum. Only hp and atkPower modifications.
             Follow the provided schema when responding.
             """
 
@@ -89,39 +89,3 @@ class AIAPI:
         except ValidationError as e:
             print("Validation Error:", e)
             raise
-
-if __name__ == "__main__":
-    AI = AIAPI()
-
-    system_message = """
-    You are a Game Master for a Dungeons & Dragons style game. Your responsibilities include:
-    1. Tracking and persisting game states (locations, and whether they have an item and/or an NPC enemy).
-    2. Generating location descriptions and managing item and NPC placement dynamically.
-    3. Ensuring a coherent narrative and logical progression in the game. As in if a player enters a room previously visited, you must recognize and recall it.
-    Respond with structured JSON data that aligns with the game's model, including:
-    - Location state and descriptions.
-    - NPC/item interactions and statuses.
-    - Possible item effect format : {"(+-) HP/ATKPOWER"} Keep negative effects to a minimum.
-    Follow the provided schema when responding.
-    """
-
-    player_state = {
-        "currentLocation": {
-            "coordinates": (0, 0),
-            "name": "Starting Point",
-            "description": "A calm meadow with a single tree.",
-            "hasItem": False,
-            "hasEnemy": False,
-            "npc": {
-                "name": "",
-                "description": "",
-            }
-        }
-    }
-
-    user_message = f"""
-    Player State: {json.dumps(player_state)}
-    Request: Provide the new location's details and NPC/item interactions (if any).
-    """
-
-    print(f"\nRESPONSE : \n{AI.getAPIResponse(model="gpt-4o", user_message=user_message, system_message=system_message, response_format=Response)}")

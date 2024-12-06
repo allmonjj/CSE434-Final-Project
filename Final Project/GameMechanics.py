@@ -5,6 +5,7 @@ from Location import Location
 from Item import Item
 import random
 import re
+import time
 
 
 class GameMechanics:
@@ -29,14 +30,15 @@ class GameMechanics:
             print(f"Player HP : {self.player.getHp()} - Player XP : {self.player.getXp()}")
             print(f"NPC HP : {npc.getHp()} - NPC XP : {npc.getXp()}\n")
             origHp = self.player.getHp()
+            origAtkPower = self.player.getAtkPower()
             while self.player.getHp() > 0 and npc.getHp() > 0:
-                self.player.setAtkPower(random.randint(1, 6))
+                self.player.setAtkPower(origAtkPower + random.randint(1, 6))
                 npc.setAtkPower(random.randint(1, 6))
-
                 npc.setHp(npc.getHp() - self.player.getAtkPower())
                 if npc.getHp() <= 0:
                     print(f"You have defeated {npc.getName()}!\n")
                     self.player.setHp(origHp)
+                    self.player.setAtkPower(origAtkPower)
                     self.player.getCurrLocation().setHasEnemy(False)
                     self.player.getCurrLocation().removeNpc()
                     if npc.getXp() != 0:
@@ -47,6 +49,9 @@ class GameMechanics:
                 if self.player.getHp() <= 0:
                     print("You have been defeated! Try again soon!")
                     exit()
+                time.sleep(2)
+                print(f"Player HP : {self.player.getHp()}")
+                print(f"NPC HP : {npc.getHp()}\n")
 
     def skillCheck(self, isChallenging) -> bool:
         if isinstance(isChallenging, bool):
@@ -167,17 +172,6 @@ class GameMechanics:
             self.player.getCurrLocation().removeItem()
 
     def parse_and_apply(self, modifier_str):
-        """
-        Enhanced parser that handles case-insensitive attributes and floating point values.
-
-        Args:
-            character (Character): The character instance to modify.
-            modifier_str (str): The modifier string, e.g., "+15.5 ATKPOWER".
-
-        Raises:
-            ValueError: If the modifier string is invalid.
-        """
-        # Enhanced regex pattern to handle floating numbers and case-insensitive attributes
         pattern = r'^([+-])(\d+(\.\d+)?)\s+(\w+)$'
         match = re.match(pattern, modifier_str.strip(), re.IGNORECASE)
 
@@ -185,30 +179,25 @@ class GameMechanics:
             raise ValueError(f"Invalid modifier format: '{modifier_str}'")
 
         sign, value, _, attribute = match.groups()
-        value = float(value)
+        value = int(value)
         if sign == '-':
             value = -value
 
-        # Normalize attribute name (assuming class attributes are uppercase)
-        attribute = attribute.upper()
-
-        # Check if the attribute exists, if not, optionally add it
-        if not hasattr(self.player, attribute):
-            # Optionally, create the attribute
-            setattr(self.player, attribute, 0)
-            print(f"Created new attribute '{attribute}' with initial value 0.")
+        if attribute == 'ATKPOWER':
+            attribute = 'atkPower'
+        elif attribute == 'HP':
+            attribute = 'hp'
 
         # Apply the modification
         current_value = getattr(self.player, attribute)
         setattr(self.player, attribute, current_value + value)
-        print(f"Applied modifier: {modifier_str} -> {attribute} updated to {getattr(self.player, attribute)}")
 
     def useItemFromInventory(self) -> None:
-        # Test object
-        self.player.getInv().add_Item(Item("test", "testDesc", "+10 ATKPOWER"))
-
         inv = self.player.getInv()
         invLength = len(inv.items)
+        if invLength == 0:
+            print(f"You have no items in your inventory!\n")
+            return
         user_input = input(f"Which item would you like to use? (1 - {invLength})")
 
         desiredItem :Item = None
@@ -217,15 +206,17 @@ class GameMechanics:
             # Item is considered the tuple, with the Key being an Item object and its value being the count of that item
             if user_input == str(i):
                 desiredItem = item[0]
-                print(f"\nItem found {item.__repr__()}")
+                print(f"\nItem found {item.__repr__()}\n")
                 break
             else:
                 continue
 
         if desiredItem is not None:
+            print(f"BEFORE : \n{self.player.__repr__()}\n")
             print(f"{desiredItem.getName()} used!\n")
             # USE ITEM LOGIC
             self.parse_and_apply(desiredItem.getEffect())
+            print(f"AFTER : \n{self.player.__repr__()}\n")
             inv.remove_Item(desiredItem)
         else:
             print("Item not found!\n")
