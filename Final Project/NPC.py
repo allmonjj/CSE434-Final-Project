@@ -1,12 +1,16 @@
 class NPC:
-    def __init__(self, name, hp, atkPower, xp=0):
+    def __init__(self, name : str, description : str, hp, atkPower, xp=0):
         self.name = name
+        self.description = description
         self.hp = hp
         self.atkPower = atkPower
         self.xp = xp
 
     def getName(self):
         return self.name
+
+    def getDescription(self):
+        return self.description
 
     def getHp(self):
         return self.hp

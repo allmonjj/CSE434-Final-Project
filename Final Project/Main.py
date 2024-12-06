@@ -1,7 +1,5 @@
 from Player import Player
-from NPC import NPC
 from Inventory import Inventory
-from Item import Item
 from GameMechanics import GameMechanics
 from Location import Location
 
@@ -49,11 +47,6 @@ def playerMovement(gm : GameMechanics):
             print("Invalid input. Try again!")
 
 def checkInventory(gm : GameMechanics):
-    # Add preset items here for testing
-
-    gm.player.getInv().add_Item(Item("Sword", "Slay enemies with the sharpest blade", "+10 DMG"))
-    gm.player.getInv().add_Item(Item("Shield", "Protect yourself with great steel", "+10 HP"))
-
     gm.checkInventory()
 
 def useInventory(gm : GameMechanics):
@@ -65,8 +58,8 @@ def useInventory(gm : GameMechanics):
                 break
 
 def main():
-    print("Welcome to CSE434 Final Project. You will play a Dungeons & Dragons 'esque' game")
-    player = Player(100, 0, 0, Inventory(), Location(0, 0, "Beginning Area"))
+    print("Welcome to my CSE434 Final Project. You will play a Dungeons & Dragons 'esque' game")
+    player = Player(100, 0, 0, Inventory(), Location(0, 0, "Mystic Forest", description='A dense forest filled with towering trees and the sounds of distant wildlife. Sunlight barely breaks through the canopy above.'))
     gm = GameMechanics(player)
     while True:
         user_input = input("What would you like to do? (Enter 1 - 4) \n1. MOVE\n2. CHECK INVENTORY\n3. LOCATION DETAILS\n4. EXIT\n")
