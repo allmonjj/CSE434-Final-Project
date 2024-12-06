@@ -54,11 +54,17 @@ class Location:
     def addNpc(self, npc : NPC):
         self.npc = npc
 
+    def removeNpc(self):
+        self.npc = None
+
     def getItem(self) -> Item:
         return self.item
 
     def removeItem(self):
         self.item = None
+
+    def setItem(self, item : Item):
+        self.item = item
 
     def isVisited(self) -> bool:
         return self.visited
